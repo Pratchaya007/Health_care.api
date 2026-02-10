@@ -1,0 +1,52 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/db/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+enum Role {
+  doctor
+  patient
+}
+model User {
+  id Int @id @default(autoincrement())
+  username String @unique
+  password String  @db.VarChar(255)
+  role  Role @default(doctor)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  doctorNotes DoctorNote[] @relation("Doctor")
+  patientNote DoctorNote[] @relation("Patient")
+  healthRecords HealthRecord[]
+
+}
+model DoctorNote {
+  id Int @id @default(autoincrement())
+  doctorId Int 
+  doctor User @relation("Doctor",fields: [doctorId], references: [id])
+  patientId Int
+  patient User @relation("Patient", fields: [patientId], references: [id])
+  note String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+model HealthRecord {
+  id Int @id @default(autoincrement())
+  patientId Int 
+  patient User @relation(fields: [patientId], references: [id])
+  type String
+  value String?
+  unit String?
+  note String?
+  createdAt DateTime @default(now())
+  updatidAt DateTime @updatedAt
+}

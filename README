@@ -1,0 +1,51 @@
+pnpm init
+pnpm add -D typescript tsx
+pnpm tsc --init
+pnpm i express
+pnpm add -D @types/express @types/node
+pnpm i dotenv
+
+pnpm i jsonwebtoken and pnpm i --save-dev @types/jsonwebtoken
+pnpm i bcrypt and pnpm i --save-dev @types/bcrypt
+pnpm add @prisma/client @prisma/adapter-pg pg 
+
+
+try {
+    const authorization = req.headers.authorization;
+    if (!authorization) {
+      return res
+        .status(401)
+        .json({ success: true, error: "Authentication required" });
+    }
+
+
+    1️⃣ แยก Authorization header
+    const result = authorization.split(" ");
+    ถ้า header เป็น:
+    Authorization: Bearer abc.def.ghi
+    จะได้
+    result = ["Bearer", "abc.def.ghi"]
+      •	result[0] = ชนิดของ auth
+      •	result[1] = ตัว token
+
+    const result = authorization?.split(" ");
+    if (result[0] !== "Bearer") {
+      return res
+        .status(401)
+        .json({ success: true, error: "Authentication required" });
+    }
+    if (!result[1]) {
+      return res
+        .status(401)
+        .json({ success: true, error: "Authentication required" });
+    }
+    const secretKey = process.env.JWT_SECRET;
+    const payload = jwt.verify(result[1], secretKey as string);
+    (req as any).user = payload;
+    next();
+  } catch (err) {
+    return res.status(401).json({
+      success: false, error: "Authentication required" 
+    })
+  }
+}
