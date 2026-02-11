@@ -8,4 +8,4 @@ doctorNotesRouter.post('/doctor',authenticateMiddleware,docternotesData.createDo
 doctorNotesRouter.get('/doctor', authenticateMiddleware,docternotesData.getDocter)
 doctorNotesRouter.get('/doctor/:id', authenticateMiddleware,docternotesData.getDocterID)
 doctorNotesRouter.put('/doctor/:id', authenticateMiddleware,docternotesData.updateDocterID)
-doctorNotesRouter.delete('/doctor-notes/:id', authenticateMiddleware,docternotesData.deleteDocterID)
+doctorNotesRouter.delete('/doctor/:id', authenticateMiddleware,docternotesData.deleteDocterID)
