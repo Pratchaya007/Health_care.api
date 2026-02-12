@@ -7,9 +7,7 @@ export const errorMiddleware = (
   res: Response,
   next: NextFunction,
 ) => {
-  /* =========================
-     1️⃣ Zod Validation Error
-  ========================= */
+    //1️⃣ Zod Validation Error
   if (err instanceof ZodError) {
     return res.status(400).json({
       success: false,
@@ -20,10 +18,8 @@ export const errorMiddleware = (
     });
   }
 
-  /* =========================
-     2️⃣ Custom Error (มี status)
-     เช่น throw { status: 403, message: "Access denied" }
-  ========================= */
+
+  //2️⃣ Custom Error (มี status) เช่น throw { status: 403, message: "Access denied" }
   if (err.status && err.message) {
     return res.status(err.status).json({
       success: false,
@@ -31,9 +27,7 @@ export const errorMiddleware = (
     });
   }
 
-  /* =========================
-     3️⃣ Default Internal Error
-  ========================= */
+  //3️⃣ Default Internal Error
   console.error(err);
 
   return res.status(500).json({
